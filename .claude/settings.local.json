@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wx-config:*)",
+      "Bash(make:*)",
+      "Bash(ls:*)",
+      "Bash(unzip:*)",
+      "Bash(cp:*)",
+      "Bash(g++:*)",
+      "Bash(find:*)",
+      "Bash(./test_zip)",
+      "Bash(sed:*)",
+      "Bash(grep:*)"
+    ],
+    "deny": []
+  }
+}

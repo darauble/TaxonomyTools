@@ -1,0 +1,156 @@
+# Build directories
+build/
+Build/
+BUILD/
+out/
+cmake-build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.slo
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+TaxonomyDict
+taxonomy-dict
+simple_test
+test_download
+test_load_archive
+test_zip
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# IDE files
+.vscode/
+.vs/
+*.vcxproj*
+*.sln
+*.suo
+*.user
+*.ncb
+*.aps
+*.plg
+*.opt
+*.clw
+*.tags
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Code::Blocks
+*.depend
+*.layout
+*.cbp
+
+# Qt Creator
+CMakeLists.txt.user*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+debug.log
+
+# Test files and temporary data
+test_*.zip
+download/*.zip
+*.tsv
+*.dict
+*.idx
+*.ifo
+output/
+
+# Package managers
+conaninfo.txt
+conanbuildinfo.cmake
+conandata.yml
+vcpkg_installed/
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Documentation generation
+doc/html/
+doc/latex/
+*.pdf
+
+# Core dumps
+core
+*.core
+
+# System files (Linux)
+.directory
+
+# System files (macOS)
+.AppleDouble
+.LSOverride
+Icon?
+
+# System files (Windows)
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Vim
+*.vim
+.*.swp
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Archives (but keep the downloaded taxonomy data if present)
+*.tar.gz
+*.zip
+!download/inaturalist-taxonomy.zip
+
+# Profiling
+*.prof
+gmon.out
+
+# Coverage
+*.gcno
+*.gcda
+*.gcov
