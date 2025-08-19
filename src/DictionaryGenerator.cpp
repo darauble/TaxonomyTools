@@ -49,13 +49,18 @@ bool DictionaryGenerator::GenerateStarDict(const std::map<wxString, std::vector<
     if (dictionary.empty())
         return false;
     
-    // Generate .ifo file
-    if (!GenerateStarDictIfo(outputDir, baseName, dictionary.size()))
-        return false;
-    
-    // Generate .idx and collect index data
+    // Generate .idx and collect index data first
     std::vector<std::pair<wxString, size_t>> indexData;
     if (!GenerateStarDictIdx(dictionary, outputDir, baseName, indexData))
+        return false;
+        
+    // Get actual IDX file size
+    wxString idxPath = outputDir + "/" + baseName + ".idx";
+    wxFileName idxFile(idxPath);
+    size_t idxFileSize = idxFile.GetSize().ToULong();
+    
+    // Generate .ifo file with correct IDX size
+    if (!GenerateStarDictIfo(outputDir, baseName, dictionary.size(), idxFileSize))
         return false;
     
     // Generate .dict file
@@ -74,13 +79,18 @@ bool DictionaryGenerator::GenerateStarDict(const std::map<wxString, std::vector<
     if (dictionary.empty())
         return false;
     
-    // Generate .ifo file with language information
-    if (!GenerateStarDictIfo(outputDir, baseName, dictionary.size(), sourceLanguage, targetLanguages))
-        return false;
-    
-    // Generate .idx and collect index data
+    // Generate .idx and collect index data first
     std::vector<std::pair<wxString, size_t>> indexData;
     if (!GenerateStarDictIdx(dictionary, outputDir, baseName, indexData))
+        return false;
+        
+    // Get actual IDX file size
+    wxString idxPath = outputDir + "/" + baseName + ".idx";
+    wxFileName idxFile(idxPath);
+    size_t idxFileSize = idxFile.GetSize().ToULong();
+    
+    // Generate .ifo file with language information and correct IDX size
+    if (!GenerateStarDictIfo(outputDir, baseName, dictionary.size(), idxFileSize, sourceLanguage, targetLanguages))
         return false;
     
     // Generate .dict file
@@ -90,7 +100,7 @@ bool DictionaryGenerator::GenerateStarDict(const std::map<wxString, std::vector<
     return true;
 }
 
-bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount)
+bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount, size_t idxFileSize)
 {
     wxString ifoPath = outputDir + "/" + baseName + ".ifo";
     wxTextFile file;
@@ -111,7 +121,7 @@ bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const w
     file.AddLine("StarDict's dict ifo file");
     file.AddLine("version=2.4.2");
     file.AddLine("wordcount=" + wxString::Format("%zu", wordCount));
-    file.AddLine("idxfilesize=" + wxString::Format("%zu", wordCount * 12)); // Approximate
+    file.AddLine("idxfilesize=" + wxString::Format("%zu", idxFileSize));
     file.AddLine("bookname=Taxonomy Dictionary");
     file.AddLine("author=TaxonomyDict");
     file.AddLine("email=");
@@ -123,7 +133,7 @@ bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const w
     return file.Write();
 }
 
-bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount,
+bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount, size_t idxFileSize,
                                               const wxString& sourceLanguage, const std::vector<wxString>& targetLanguages)
 {
     wxString ifoPath = outputDir + "/" + baseName + ".ifo";
@@ -166,7 +176,7 @@ bool DictionaryGenerator::GenerateStarDictIfo(const wxString& outputDir, const w
     file.AddLine("StarDict's dict ifo file");
     file.AddLine("version=2.4.2");
     file.AddLine("wordcount=" + wxString::Format("%zu", wordCount));
-    file.AddLine("idxfilesize=" + wxString::Format("%zu", wordCount * 12)); // Approximate
+    file.AddLine("idxfilesize=" + wxString::Format("%zu", idxFileSize));
     file.AddLine("bookname=" + bookName);
     file.AddLine("author=TaxonomyDict");
     file.AddLine("email=darau.ble@gmail.com");

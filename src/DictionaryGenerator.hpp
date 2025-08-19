@@ -23,8 +23,8 @@ public:
                          const std::vector<wxString>& targetLanguages);
 
 private:
-    bool GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount);
-    bool GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount,
+    bool GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount, size_t idxFileSize);
+    bool GenerateStarDictIfo(const wxString& outputDir, const wxString& baseName, size_t wordCount, size_t idxFileSize,
                             const wxString& sourceLanguage, const std::vector<wxString>& targetLanguages);
     bool GenerateStarDictIdx(const std::map<wxString, std::vector<wxString>>& dictionary,
                             const wxString& outputDir, const wxString& baseName,
