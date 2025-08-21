@@ -84,6 +84,7 @@ private:
     void CreateMenuBar();
     void CreateControls();
     void CreateLayout();
+    void SetApplicationIcon();
 
     // Event handlers
     void OnExit(wxCommandEvent& event);

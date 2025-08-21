@@ -1,10 +1,14 @@
 #include "MainFrame.hpp"
 #include "TaxonomyProcessor.hpp"
 #include "Downloader.hpp"
+#include "icon_data.h"
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/icon.h>
+#include <wx/iconbndl.h>
+#include <wx/mstream.h>
 #include <algorithm>
 
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
@@ -31,6 +35,7 @@ MainFrame::MainFrame()
     CreateMenuBar();
     CreateControls();
     CreateLayout();
+    SetApplicationIcon();
     
     // Bind thread events explicitly - TEMPORARILY DISABLED to test
     // Bind(wxEVT_DOWNLOAD_PROGRESS, &MainFrame::OnDownloadProgress, this);
@@ -213,6 +218,27 @@ void MainFrame::CreateLayout()
     mainSizer->Add(outputBox, 0, wxEXPAND | wxALL, 10);
     
     SetSizer(mainSizer);
+}
+
+void MainFrame::SetApplicationIcon()
+{
+#ifdef __WXMSW__
+    // On Windows, the icon is automatically loaded from the resource file
+    SetIcon(wxIcon("IDI_ICON1"));
+#else
+    // On Linux, load the PNG icon from embedded data
+    wxMemoryInputStream stream(taxonomy_dict_icon_png, taxonomy_dict_icon_png_len);
+    wxImage image(stream, wxBITMAP_TYPE_PNG);
+    
+    if (image.IsOk())
+    {
+        // Scale to appropriate icon size
+        image = image.Scale(48, 48, wxIMAGE_QUALITY_HIGH);
+        wxIcon icon;
+        icon.CopyFromBitmap(wxBitmap(image));
+        SetIcon(icon);
+    }
+#endif
 }
 
 void MainFrame::OnExit(wxCommandEvent& event)

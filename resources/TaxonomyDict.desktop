@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Taxonomy Dict
+Comment=Dictionary application for taxonomy data
+Exec=TaxonomyDict
+Icon=TaxonomyDict
+Categories=Education;Science;
+StartupNotify=true

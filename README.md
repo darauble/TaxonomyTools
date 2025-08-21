@@ -217,6 +217,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 This unique project demonstrates AI-generated software capabilities through AI-human collaboration:
 - **AI Prompting & Direction**: Darau, Blė
+- **Icon Design**: Darau, Blė
 - **Code Generation & Implementation**: Claude AI (Anthropic)
 
 ## Acknowledgments
