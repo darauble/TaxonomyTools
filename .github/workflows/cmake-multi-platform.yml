@@ -104,9 +104,12 @@ jobs:
       run: |
         mkdir -p portable/TaxonomyTools
 
+        # Convert Windows path to Unix-style for bash
+        BUILD_DIR=$(echo "${{ steps.strings.outputs.build-output-dir }}" | sed 's/\\/\//g')
+
         # Copy executables
-        cp ${{ steps.strings.outputs.build-output-dir }}/Release/*.exe portable/TaxonomyTools/ 2>/dev/null || \
-        cp ${{ steps.strings.outputs.build-output-dir }}/*.exe portable/TaxonomyTools/
+        cp "$BUILD_DIR/Release/"*.exe portable/TaxonomyTools/ 2>/dev/null || \
+        cp "$BUILD_DIR/"*.exe portable/TaxonomyTools/
 
         # Copy required DLLs from vcpkg
         vcpkg_root="C:/vcpkg/installed/x64-windows"
