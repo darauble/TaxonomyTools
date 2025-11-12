@@ -34,8 +34,8 @@ Makefile
 *.exe
 *.out
 *.app
-TaxonomyDict
-taxonomy-dict
+/TaxonomyDict
+/TaxonomyTree
 simple_test
 test_download
 test_load_archive
