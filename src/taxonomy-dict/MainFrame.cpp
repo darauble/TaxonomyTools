@@ -3,6 +3,7 @@
 #include "Downloader.hpp"
 #include "DictStrings.hpp"
 #include "SettingsDialog.hpp"
+#include "Version.hpp"
 #include "icon_data.h"
 #include <wx/filedlg.h>
 #include <wx/dirdlg.h>
@@ -255,7 +256,10 @@ void MainFrame::OnExit(wxCommandEvent& event)
 void MainFrame::OnAbout(wxCommandEvent& event)
 {
     (void)event;
-    wxMessageBox(TR_DICT(DictStringId::AboutMessage),
+    wxString aboutMsg = wxString("Taxonomy Dictionary Generator v") +
+                        TAXONOMYTOOLS_VERSION_STRING +
+                        TR_DICT(DictStringId::AboutMessage);
+    wxMessageBox(aboutMsg,
                  TR_DICT(DictStringId::DlgAbout), wxOK | wxICON_INFORMATION, this);
 }
 

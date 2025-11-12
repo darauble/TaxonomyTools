@@ -72,8 +72,8 @@ const char* const DICT_STRINGS_ES[] = {
     "Generación de diccionario fallida",
     "Error al inicializar CURL",
 
-    // About dialog message
-    "Generador de Diccionario Taxonómico v1.0\n\nGenera diccionarios de traducción a partir de datos taxonómicos de iNaturalist.",
+    // About dialog message (note: version will be prepended at runtime)
+    "\n\nGenera diccionarios de traducción a partir de datos taxonómicos de iNaturalist.",
 
     // File dialog filters
     "Archivos ZIP (*.zip)|*.zip",

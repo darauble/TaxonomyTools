@@ -72,8 +72,8 @@ const char* const DICT_STRINGS_LT[] = {
     "Žodyno generacija nepavyko",
     "Nepavyko inicializuoti CURL",
 
-    // About dialog message
-    "Taksonomijos žodyno generatorius v1.0\n\nGeneruoja vertimų žodynus iš iNaturalist taksonomijos duomenų.",
+    // About dialog message (note: version will be prepended at runtime)
+    "\n\nGeneruoja vertimų žodynus iš iNaturalist taksonomijos duomenų.",
 
     // File dialog filters
     "ZIP failai (*.zip)|*.zip",

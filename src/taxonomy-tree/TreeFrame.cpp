@@ -2,6 +2,7 @@
 #include "Downloader.hpp"
 #include "SettingsDialog.hpp"
 #include "TreeStrings.hpp"
+#include "Version.hpp"
 #include "icon_data.h"
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
@@ -853,7 +854,9 @@ void TreeFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 
 void TreeFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxString aboutMsg = TR_TREE(TreeStringId::AboutVersion) +
+    wxString aboutMsg = wxString("TaxonomyTree v") +
+                       TAXONOMYTOOLS_VERSION_STRING +
+                       TR_TREE(TreeStringId::AboutVersion) +
                        TR_TREE(TreeStringId::AboutDescription) +
                        TR_TREE(TreeStringId::AboutPurpose);
     wxMessageBox(aboutMsg, TR_TREE(TreeStringId::DlgAboutTitle), wxOK | wxICON_INFORMATION);

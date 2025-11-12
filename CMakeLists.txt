@@ -73,6 +73,13 @@ endif()
 
 find_package(CURL REQUIRED)
 
+# Configure version header from template
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/Version.hpp.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/Version.hpp"
+    @ONLY
+)
+
 # Common library sources
 set(COMMON_SOURCES
     src/common/Downloader.cpp

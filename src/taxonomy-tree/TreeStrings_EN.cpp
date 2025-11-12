@@ -130,8 +130,8 @@ const char* const TREE_STRINGS_EN[] = {
     // Closing message
     "Cleaning up and closing...\nPlease wait.",
 
-    // About dialog
-    "TaxonomyTree v1.0\n\n",
+    // About dialog (note: version will be prepended at runtime to first string)
+    "\n\n",
     "Taxonomic Family Tree Viewer\n\n",
     "Compare species and visualize their taxonomic relationships.",
 

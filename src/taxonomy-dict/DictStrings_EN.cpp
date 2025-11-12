@@ -72,8 +72,8 @@ const char* const DICT_STRINGS_EN[] = {
     "Dictionary generation failed",
     "Failed to initialize CURL",
 
-    // About dialog message
-    "Taxonomy Dictionary Generator v1.0\n\nGenerates translation dictionaries from iNaturalist taxonomy data.",
+    // About dialog message (note: version will be prepended at runtime)
+    "\n\nGenerates translation dictionaries from iNaturalist taxonomy data.",
 
     // File dialog filters
     "ZIP files (*.zip)|*.zip",

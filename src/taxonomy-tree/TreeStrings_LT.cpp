@@ -133,8 +133,8 @@ const char* const TREE_STRINGS_LT[] = {
     // Closing message
     "Valoma ir uždaroma...\nPrašome palaukti.",
 
-    // About dialog
-    "TaksonomijosMedias v1.0\n\n",
+    // About dialog (note: version will be prepended at runtime to first string)
+    "\n\n",
     "Taksonominio šeimos medžio peržiūros programa\n\n",
     "Palyginkite rūšis ir vizualizuokite jų taksonominius ryšius.",
 

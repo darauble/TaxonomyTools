@@ -130,8 +130,8 @@ const char* const TREE_STRINGS_ES[] = {
     // Closing message
     "Limpiando y cerrando...\nPor favor espere.",
 
-    // About dialog
-    "ÁrbolTaxonómico v1.0\n\n",
+    // About dialog (note: version will be prepended at runtime to first string)
+    "\n\n",
     "Visor de Árbol Genealógico Taxonómico\n\n",
     "Compare especies y visualice sus relaciones taxonómicas.",
 
