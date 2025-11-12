@@ -12,55 +12,66 @@ option(BUILD_TAXONOMY_TREE "Build TaxonomyTree application" ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Find required packages
-find_package(PkgConfig REQUIRED)
+if(UNIX)
+    find_package(PkgConfig REQUIRED)
 
-# Find wxWidgets using wx-config
-execute_process(
-    COMMAND wx-config --cxxflags
-    OUTPUT_VARIABLE wxWidgets_CXX_FLAGS
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+    # Find wxWidgets using wx-config on Unix
+    execute_process(
+        COMMAND wx-config --cxxflags
+        OUTPUT_VARIABLE wxWidgets_CXX_FLAGS
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-execute_process(
-    COMMAND wx-config --libs
-    OUTPUT_VARIABLE wxWidgets_LIBRARIES
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+    execute_process(
+        COMMAND wx-config --libs
+        OUTPUT_VARIABLE wxWidgets_LIBRARIES
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-# Convert flags to lists for proper handling
-separate_arguments(wxWidgets_CXX_FLAGS_LIST UNIX_COMMAND "${wxWidgets_CXX_FLAGS}")
-separate_arguments(wxWidgets_LINK_LIBRARIES UNIX_COMMAND "${wxWidgets_LIBRARIES}")
+    # Convert flags to lists for proper handling
+    separate_arguments(wxWidgets_CXX_FLAGS_LIST UNIX_COMMAND "${wxWidgets_CXX_FLAGS}")
+    separate_arguments(wxWidgets_LINK_LIBRARIES UNIX_COMMAND "${wxWidgets_LIBRARIES}")
 
-# Extract include directories
-set(wxWidgets_INCLUDE_DIRS)
-foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
-    if(flag MATCHES "^-I")
-        string(SUBSTRING ${flag} 2 -1 include_dir)
-        list(APPEND wxWidgets_INCLUDE_DIRS ${include_dir})
-    endif()
-endforeach()
+    # Extract include directories
+    set(wxWidgets_INCLUDE_DIRS)
+    foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
+        if(flag MATCHES "^-I")
+            string(SUBSTRING ${flag} 2 -1 include_dir)
+            list(APPEND wxWidgets_INCLUDE_DIRS ${include_dir})
+        endif()
+    endforeach()
 
-# Extract definitions
-set(wxWidgets_DEFINITIONS)
-foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
-    if(flag MATCHES "^-D")
-        string(SUBSTRING ${flag} 2 -1 definition)
-        list(APPEND wxWidgets_DEFINITIONS ${definition})
-    endif()
-endforeach()
+    # Extract definitions
+    set(wxWidgets_DEFINITIONS)
+    foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
+        if(flag MATCHES "^-D")
+            string(SUBSTRING ${flag} 2 -1 definition)
+            list(APPEND wxWidgets_DEFINITIONS ${definition})
+        endif()
+    endforeach()
 
-# Extract other options
-set(wxWidgets_OTHER_OPTIONS)
-foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
-    if(flag MATCHES "^-[^DI]")
-        list(APPEND wxWidgets_OTHER_OPTIONS ${flag})
-    endif()
-endforeach()
+    # Extract other options
+    set(wxWidgets_OTHER_OPTIONS)
+    foreach(flag ${wxWidgets_CXX_FLAGS_LIST})
+        if(flag MATCHES "^-[^DI]")
+            list(APPEND wxWidgets_OTHER_OPTIONS ${flag})
+        endif()
+    endforeach()
+
+    # Find libzip using pkg-config
+    pkg_check_modules(LIBZIP REQUIRED libzip)
+else()
+    # Windows: use vcpkg packages
+    find_package(wxWidgets REQUIRED COMPONENTS core base)
+    include(${wxWidgets_USE_FILE})
+
+    # Find libzip
+    find_package(libzip CONFIG REQUIRED)
+    set(LIBZIP_LIBRARIES libzip::zip)
+    set(LIBZIP_INCLUDE_DIRS "")
+endif()
 
 find_package(CURL REQUIRED)
-
-# Find libzip
-pkg_check_modules(LIBZIP REQUIRED libzip)
 
 # Common library sources
 set(COMMON_SOURCES
@@ -82,23 +93,38 @@ set(COMMON_HEADERS
 add_library(TaxonomyCommon STATIC ${COMMON_SOURCES} ${COMMON_HEADERS})
 
 # Include directories for common library
-target_include_directories(TaxonomyCommon PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/common
-    ${wxWidgets_INCLUDE_DIRS}
-    ${CURL_INCLUDE_DIRS}
-    ${LIBZIP_INCLUDE_DIRS}
-)
+if(UNIX)
+    target_include_directories(TaxonomyCommon PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/common
+        ${wxWidgets_INCLUDE_DIRS}
+        ${CURL_INCLUDE_DIRS}
+        ${LIBZIP_INCLUDE_DIRS}
+    )
 
-# Add compile definitions and options to common library
-target_compile_definitions(TaxonomyCommon PUBLIC ${wxWidgets_DEFINITIONS})
-target_compile_options(TaxonomyCommon PUBLIC ${wxWidgets_OTHER_OPTIONS})
+    # Add compile definitions and options to common library
+    target_compile_definitions(TaxonomyCommon PUBLIC ${wxWidgets_DEFINITIONS})
+    target_compile_options(TaxonomyCommon PUBLIC ${wxWidgets_OTHER_OPTIONS})
 
-# Link libraries to common library
-target_link_libraries(TaxonomyCommon PUBLIC
-    ${wxWidgets_LINK_LIBRARIES}
-    ${CURL_LIBRARIES}
-    ${LIBZIP_LIBRARIES}
-)
+    # Link libraries to common library
+    target_link_libraries(TaxonomyCommon PUBLIC
+        ${wxWidgets_LINK_LIBRARIES}
+        ${CURL_LIBRARIES}
+        ${LIBZIP_LIBRARIES}
+    )
+else()
+    target_include_directories(TaxonomyCommon PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/common
+        ${wxWidgets_INCLUDE_DIRS}
+        ${CURL_INCLUDE_DIRS}
+    )
+
+    # Link libraries to common library
+    target_link_libraries(TaxonomyCommon PUBLIC
+        ${wxWidgets_LIBRARIES}
+        CURL::libcurl
+        ${LIBZIP_LIBRARIES}
+    )
+endif()
 
 # Platform-specific settings for common library
 if(WIN32)
