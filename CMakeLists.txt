@@ -261,3 +261,23 @@ if(BUILD_TAXONOMY_TREE)
         install(FILES icon/tree-icon.png DESTINATION share/icons/hicolor/512x512/apps RENAME TaxonomyTree.png)
     endif()
 endif()
+
+# CPack configuration for DEB packages
+set(CPACK_GENERATOR "DEB")
+set(CPACK_PACKAGE_NAME "taxonomy-tools")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_CONTACT "darauble@github.com")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Taxonomic Dictionary and Family Tree Tools")
+set(CPACK_PACKAGE_DESCRIPTION "Tools for working with iNaturalist taxonomic data:
+ TaxonomyDict - Generate StarDict dictionaries from taxonomic data
+ TaxonomyTree - Visualize taxonomic family trees and compare species")
+set(CPACK_DEBIAN_PACKAGE_SECTION "science")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxgtk3.2-1, libcurl4, libzip4")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/darauble/TaxonomyTools")
+set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-amd64")
+
+include(CPack)

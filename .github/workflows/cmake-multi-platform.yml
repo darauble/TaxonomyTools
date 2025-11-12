@@ -100,3 +100,87 @@ jobs:
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
+
+    # Package for Linux (DEB)
+    - name: Create DEB package (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        cd ${{ steps.strings.outputs.build-output-dir }}
+        cpack -G DEB
+
+    - name: Upload DEB artifacts (Ubuntu)
+      if: runner.os == 'Linux'
+      uses: actions/upload-artifact@v4
+      with:
+        name: debian-packages-${{ matrix.cpp_compiler }}
+        path: ${{ steps.strings.outputs.build-output-dir }}/*.deb
+        if-no-files-found: error
+
+    # Package for Windows (Portable ZIP with static dependencies)
+    - name: Create Windows portable package
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        mkdir -p portable/TaxonomyTools
+
+        # Copy executables
+        cp ${{ steps.strings.outputs.build-output-dir }}/Release/*.exe portable/TaxonomyTools/ 2>/dev/null || \
+        cp ${{ steps.strings.outputs.build-output-dir }}/*.exe portable/TaxonomyTools/
+
+        # Copy required DLLs from vcpkg
+        vcpkg_root="C:/vcpkg/installed/x64-windows"
+        cp "$vcpkg_root/bin/"*.dll portable/TaxonomyTools/ 2>/dev/null || true
+
+        # Copy Visual C++ Runtime (if needed)
+        # The executables should be statically linked, but we include DLLs just in case
+
+        # Create README
+        cat > portable/TaxonomyTools/README.txt << 'EOF'
+        TaxonomyTools Portable Edition
+        ===============================
+
+        This is a portable version of TaxonomyTools for Windows.
+        Simply extract and run the executables:
+
+        - TaxonomyDict.exe - Dictionary generator
+        - TaxonomyTree.exe - Family tree visualizer
+
+        No installation required!
+        EOF
+
+        # Create ZIP
+        cd portable
+        7z a ../TaxonomyTools-Windows-x64-Portable.zip TaxonomyTools/
+
+    - name: Upload Windows portable artifacts
+      if: runner.os == 'Windows'
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-portable
+        path: TaxonomyTools-Windows-x64-Portable.zip
+        if-no-files-found: error
+
+  # Create release when a tag is pushed
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/debian-packages-g++/*.deb
+            artifacts/windows-portable/*.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

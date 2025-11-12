@@ -3,6 +3,7 @@ build/
 Build/
 BUILD/
 out/
+download/
 cmake-build-*/
 
 # CMake generated files
@@ -153,4 +154,4 @@ gmon.out
 # Coverage
 *.gcno
 *.gcda
-*.gcov
+*.gcovdownload/
