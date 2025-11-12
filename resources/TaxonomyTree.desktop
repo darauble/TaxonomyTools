@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Taxonomy Tree
+Comment=Visualize and compare taxonomic family trees
+Exec=TaxonomyTree
+Icon=TaxonomyTree
+Categories=Education;Science;
+StartupNotify=true

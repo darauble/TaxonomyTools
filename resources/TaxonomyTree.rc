@@ -1,0 +1,4 @@
+#include <wx/msw/wx.rc>
+
+// Icon resource for Windows
+IDI_ICON1 ICON "tree-icon.ico"

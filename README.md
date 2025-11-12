@@ -1,6 +1,9 @@
-# Taxonomy Dictionary Generator
+# TaxonomyTools
 
-A desktop application for generating translation dictionaries from iNaturalist taxonomy data, supporting both TSV and StarDict formats.
+A suite of desktop applications for working with iNaturalist taxonomy data. This project includes two powerful tools:
+
+- **TaxonomyDict**: Generate translation dictionaries from taxonomy data in TSV and StarDict formats
+- **TaxonomyTree**: Visualize and compare taxonomic relationships with interactive family tree diagrams
 
 ## 🤖 AI-Generated Project
 
@@ -16,6 +19,7 @@ This project serves as a case study in AI-human collaboration for software devel
 
 ## Features
 
+### TaxonomyDict - Dictionary Generator
 - **Download & Process**: Automatically download and extract iNaturalist taxonomy data
 - **Multi-Language Support**: Generate dictionaries between any supported languages
 - **Scientific Names**: Include scientific nomenclature in translations
@@ -25,9 +29,19 @@ This project serves as a case study in AI-human collaboration for software devel
 - **Progress Tracking**: Real-time progress indicators for all operations
 - **User-Friendly Interface**: Clean, intuitive GUI with search functionality
 
+### TaxonomyTree - Family Tree Visualizer
+- **Interactive Visualization**: Display taxonomic relationships in fan, vertical, or horizontal tree layouts
+- **Species Comparison**: Add multiple species to compare their evolutionary relationships
+- **Multi-Language Display**: View taxa names in primary and secondary languages simultaneously
+- **Common Ancestor Analysis**: Automatically find and display common ancestors of selected species
+- **Full Tree Mode**: Option to show complete taxonomic tree up to kingdom level
+- **Export Capabilities**: Save trees as SVG vector graphics or high-resolution PNG images
+- **Zoom & Pan**: Smooth zoom controls and drag-to-pan navigation
+- **Search Functionality**: Quick incremental search across all taxa in selected languages
+
 ## Screenshots
 
-### Application Interface
+### TaxonomyDict Interface
 ![Taxonomy Dictionary Generator Interface](screenshots/taxonomy-dict.png)
 
 The main application window showing the intuitive interface with language selection, filtering options, and progress tracking.
@@ -36,6 +50,11 @@ The main application window showing the intuitive interface with language select
 ![Generated Dictionary in GoldenDict](screenshots/golden-dict.png)
 
 Example of a generated StarDict dictionary being used in GoldenDict, showing formatted translations with language tags and scientific names.
+
+### TaxonomyTree Interface
+![Taxonomy Tree Visualizer](screenshots/zyles.png)
+
+Interactive taxonomic family tree viewer showing species relationships with multi-language support and various layout options.
 
 ## System Requirements
 
@@ -63,18 +82,37 @@ sudo apt install libwxgtk3.0-gtk3-dev libcurl4-openssl-dev libzip-dev
 ### Building from Source
 ```bash
 git clone <repository-url>
-cd Taxonomy-Dict
+cd TaxonomyTools
 mkdir build && cd build
 cmake ..
 make
 ```
 
-### Running the Application
+This will build both applications.
+
+### Running the Applications
 ```bash
-./TaxonomyDict
+# Launch the dictionary generator
+./build/TaxonomyDict
+
+# Launch the tree visualizer
+./build/TaxonomyTree
+```
+
+You can also build individual applications:
+```bash
+# Build only TaxonomyDict
+cmake -DBUILD_TAXONOMY_TREE=OFF ..
+make
+
+# Build only TaxonomyTree
+cmake -DBUILD_TAXONOMY_DICT=OFF ..
+make
 ```
 
 ## User Guide
+
+## TaxonomyDict User Guide
 
 ### 1. Getting Started
 
@@ -182,14 +220,170 @@ Translations are formatted with clear language indicators:
 - **Naming Convention**: Consistent naming based on source language
 - **File Sizes**: Vary based on language coverage and filtering options
 
+---
+
+## TaxonomyTree User Guide
+
+### 1. Getting Started
+
+#### Download or Load Taxonomy Data
+1. **Download Data**: Use File → Download Taxonomy Data (Ctrl+D)
+   - Downloads the latest iNaturalist taxonomy archive
+   - Shows progress during download
+2. **Load Archive**: Use File → Load Archive (Ctrl+O)
+   - Browse and select a taxonomy ZIP file
+   - Wait for processing and language detection
+
+### 2. Language Configuration
+
+#### Primary Language Selection
+- **Choose Primary**: Select the main display language from the dropdown
+- **Autocomplete**: Type to quickly find languages
+- **Search Index**: Changes rebuild the search index for the selected language
+
+#### Secondary Language (Optional)
+- **Add Secondary**: Select an additional language for bilingual display
+- **None Option**: Select "(None)" to show only primary language
+- **Dual Display**: Both languages appear on tree nodes when secondary is selected
+
+### 3. Finding and Adding Species
+
+#### Search Taxa
+1. **Type Search Term**: Enter at least 3 characters in the search box
+2. **View Results**: Search results appear automatically with scientific names in parentheses
+3. **Add to Compare List**: Double-click any result to add it to the comparison list
+
+#### Compare List Management
+- **View Selected**: All selected species appear in the compare list
+- **Remove Species**: Double-click any item in the compare list to remove it
+- **Clear All**: Click "Clear List" button to remove all species at once
+
+### 4. Tree Visualization
+
+#### Layout Options
+- **Fan Layout** (Ctrl+1): Circular/radial tree spreading from center
+- **Vertical Layout** (Ctrl+2): Traditional top-to-bottom tree
+- **Horizontal Layout** (Ctrl+3): Left-to-right tree layout
+
+#### Display Options
+- **Show Boxes** (Ctrl+B): Toggle rectangular boxes around node labels
+- **Show Full Tree** (Ctrl+F): Display complete ancestry up to kingdom level
+  - *Unchecked*: Shows only common ancestor relationships
+  - *Checked*: Extends tree to include all taxonomic levels to kingdom
+
+#### Navigation Controls
+- **Zoom In** (Ctrl+= or Ctrl+Numpad+): Increase tree size
+- **Zoom Out** (Ctrl+- or Ctrl+Numpad-): Decrease tree size
+- **Reset Zoom** (Ctrl+0 or Ctrl+Numpad0): Return to 100% zoom
+- **Mouse Wheel**: Hold Ctrl and scroll to zoom
+- **Drag to Pan**: Click and drag to move the tree view
+- **Scroll Bars**: Use scrollbars for precise navigation
+
+### 5. Exporting Trees
+
+#### Export to SVG
+1. **Select**: File → Export to SVG (Ctrl+S) (**NOTE:** Fan layout cannot be exported to SVG, it reverts to 300 dpi PNG)
+2. **Choose Location**: Select save location and filename
+3. **Vector Format**: Produces scalable vector graphics perfect for publications
+
+#### Export to PNG
+1. **Select**: File → Export to PNG (Ctrl+P)
+2. **Set DPI**: Enter desired resolution (70-600 DPI)
+   - 150 DPI: Standard screen resolution
+   - 300 DPI: Print quality
+   - 600 DPI: High-quality publications
+3. **Raster Format**: Produces pixel-based images at specified resolution
+
+### 6. Understanding the Tree Display
+
+#### Node Information
+- **Primary Name**: Displayed in the selected primary language
+- **Secondary Name**: Shown below in secondary language (if selected)
+- **Scientific Names**: Always available when hovering or in scientific name mode
+- **Taxonomic Rank**: Indicated by node position and styling
+
+#### Tree Structure
+- **Common Ancestors**: Automatically calculated and displayed
+- **Branch Lines**: Connect related taxa showing evolutionary relationships
+- **Terminal Nodes**: Selected species appear at the tree endpoints
+- **Internal Nodes**: Common ancestors and intermediate taxonomic ranks
+
+### 7. Example Usage Scenarios
+
+#### Compare Similar Species
+- **Purpose**: Understand how closely related different species are
+- **Example**: Compare Wolf, Dog, Fox to see Canidae family relationships
+- **Result**: Visual tree showing common ancestors and divergence points
+
+#### Multi-Language Learning
+- **Purpose**: Learn species names in multiple languages
+- **Example**: Primary=English, Secondary=Spanish
+- **Result**: See both English and Spanish names on all nodes
+
+#### Full Taxonomic Context
+- **Purpose**: Understand complete classification hierarchy
+- **Example**: Add any species, enable "Show Full Tree"
+- **Result**: Complete tree from Kingdom to Species
+
+#### Publication Graphics
+- **Purpose**: Create high-quality figures for papers
+- **Example**: Configure tree, export as SVG at high DPI
+- **Result**: Publication-ready vector graphics with perfect scaling
+
+### 8. Performance Tips
+
+- **Language Indexing**: Initial language selection may take a few seconds for large datasets
+- **Search Response**: Search results appear with slight delay for smooth typing
+- **Tree Complexity**: More species = more complex tree calculations
+- **Export Quality**: Higher DPI = larger file sizes and longer export times
+- **Full Tree Mode**: Enabling full tree significantly increases tree size and complexity
+
+### 9. Keyboard Shortcuts
+
+#### File Operations
+- **Ctrl+D**: Download taxonomy data
+- **Ctrl+O**: Load archive
+- **Ctrl+S**: Export to SVG
+- **Ctrl+P**: Export to PNG
+- **Ctrl+Q**: Exit application
+
+#### View Controls
+- **Ctrl+1**: Fan layout
+- **Ctrl+2**: Vertical layout
+- **Ctrl+3**: Horizontal layout
+- **Ctrl+B**: Toggle boxes
+- **Ctrl+F**: Toggle full tree
+
+#### Zoom Controls
+- **Ctrl+=**: Zoom in
+- **Ctrl+-**: Zoom out
+- **Ctrl+0**: Reset zoom
+- **Ctrl+Wheel**: Smooth zoom
+
+---
+
 ## Technical Details
 
 ### Architecture
+
+#### Common Components
 - **GUI Framework**: wxWidgets for cross-platform desktop interface
 - **Threading**: Multi-threaded design for responsive UI during operations
 - **Data Processing**: CSV parsing with efficient memory management
 - **Network**: libcurl for reliable data downloading
 - **Compression**: libzip for archive handling
+
+#### TaxonomyDict Specifics
+- **Dictionary Formats**: TSV and StarDict generation engines
+- **Text Processing**: HTML markup and formatting for rich text display
+- **Multi-target Support**: Efficient handling of multiple target languages
+
+#### TaxonomyTree Specifics
+- **Tree Algorithms**: Efficient common ancestor finding and tree construction
+- **Search Indexing**: Fast multi-language search with autocomplete
+- **Rendering Engine**: Custom vector graphics rendering for tree layouts
+- **Export Formats**: SVG vector and PNG raster image generation
+- **Zoom & Pan**: Smooth interactive navigation with hardware acceleration
 
 ### Data Sources
 - **Primary**: iNaturalist taxonomy database
@@ -223,12 +417,12 @@ This unique project demonstrates AI-generated software capabilities through AI-h
 ## Acknowledgments
 
 - **iNaturalist**: For providing comprehensive taxonomy data
-- **Claude AI**: For generating the entire codebase
+- **Claude AI**: For generating 90% of the codebase
 - **wxWidgets Community**: For the excellent cross-platform GUI framework
 - **Open Source Community**: For the foundational libraries used
 
 ---
 
-*This README and the entire project were generated by Claude AI as part of an exploration into AI-assisted software development capabilities.*
+*This README and 90% of the project were generated by Claude AI as part of an exploration into AI-assisted software development capabilities.*
 
 **Copyright to AI prompting**: Darau, Blė.

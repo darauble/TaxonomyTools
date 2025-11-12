@@ -10,7 +10,13 @@
       "Bash(find:*)",
       "Bash(./test_zip)",
       "Bash(sed:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(cmake:*)",
+      "Bash(mkdir:*)",
+      "Bash(convert:*)",
+      "Bash(xxd:*)",
+      "Bash(/tmp/test_icon.h)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }
