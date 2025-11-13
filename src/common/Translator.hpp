@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <wx/string.h>
 
 // Language enumeration
 enum class Language {
@@ -76,19 +77,35 @@ public:
     // Helper for formatted strings with positional parameters
     template<typename... Args>
     static std::string Format(const char* fmt, Args... args) {
-        // Calculate required buffer size
-        int size = std::snprintf(nullptr, 0, fmt, args...) + 1;
-        if (size <= 0) {
-            return std::string(fmt); // Return format string on error
-        }
+        try {
+            // Convert POSIX positional format to simple format
+            wxString wxFmt = ConvertFormatString(fmt);
 
-        // Allocate and format
-        std::vector<char> buffer(size);
-        std::snprintf(buffer.data(), size, fmt, args...);
-        return std::string(buffer.data(), buffer.data() + size - 1);
+            // Use wxString::Format for cross-platform formatting
+            wxString result = wxString::Format(wxFmt, args...);
+
+            // Convert to std::string (UTF-8)
+            return result.ToStdString();
+        } catch (...) {
+            // Fallback: return format string on any error
+            return std::string(fmt);
+        }
     }
 
 private:
+    // Convert POSIX positional format specifiers to simple format
+    static wxString ConvertFormatString(const char* fmt) {
+        wxString result(fmt, wxConvUTF8);
+
+        // Remove positional parameter syntax (n$)
+        // Works because all format strings use sequential parameters
+        result.Replace(wxT("%1$"), wxT("%"));
+        result.Replace(wxT("%2$"), wxT("%"));
+        result.Replace(wxT("%3$"), wxT("%"));
+        result.Replace(wxT("%4$"), wxT("%"));
+
+        return result;
+    }
     Translator() : m_currentLanguage(Language::English) {}
 
     void NotifyListeners() {
