@@ -424,7 +424,7 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
     {
         UpdateLanguageChoices();
         wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusLoadedTaxa,
-                                         static_cast<unsigned long long>(m_taxonomyData->GetAllTaxa().size()));
+                                         m_taxonomyData->GetAllTaxa().size());
         SetStatusText(statusMsg, 0);
         // No need for success message box - loading progress is already shown
     }
@@ -549,9 +549,10 @@ void TreeFrame::OnPrimaryLanguageChanged(wxCommandEvent& WXUNUSED(event))
     if (!primaryLang.IsEmpty())
     {
         // Show progress dialog for indexing
-        wxString indexMsg = TR_TREE_FMT(TreeStringId::MsgBuildingIndex, primaryLang.c_str());
-        if (!secondaryLang.IsEmpty())
-            indexMsg += TR_TREE_FMT(TreeStringId::MsgBuildingIndexAnd, secondaryLang.c_str());
+        wxString indexMsg = TR_TREE_FMT(TreeStringId::MsgBuildingIndex, primaryLang);
+        if (!secondaryLang.IsEmpty()) {
+            indexMsg += TR_TREE_FMT(TreeStringId::MsgBuildingIndexAnd, secondaryLang);
+        }
 
         wxProgressDialog indexDlg(TR_TREE(TreeStringId::DlgIndexing), indexMsg, 100, this,
                                    wxPD_APP_MODAL | wxPD_AUTO_HIDE);

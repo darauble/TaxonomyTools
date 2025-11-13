@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <tuple>
+#include <utility>
+#include <type_traits>
 #include <wx/string.h>
 
 // Language enumeration
@@ -74,22 +77,60 @@ public:
         );
     }
 
-    // Helper for formatted strings
+    // Helper for formatted strings - handles wxString arguments properly
+    // This overload converts all wxString arguments to std::string
     template<typename... Args>
-    static std::string Format(const char* fmt, Args... args) {
-        try {
-            // Convert UTF-8 C-string to wxString
-            wxString wxFmt(fmt, wxConvUTF8);
+    static std::string Format(const char* fmt, const Args&... args) {
+        // Store converted strings to ensure they live long enough
+        auto converted = std::make_tuple(ConvertForFormat(args)...);
+        return FormatWithTuple(fmt, converted, std::index_sequence_for<Args...>{});
+    }
 
-            // Use wxString::Format for cross-platform formatting
-            wxString result = wxString::Format(wxFmt, args...);
+private:
+    // Convert wxString to std::string for formatting
+    static std::string ConvertForFormat(const wxString& arg) {
+        return arg.ToStdString();
+    }
 
-            // Convert to std::string (UTF-8)
-            return result.ToStdString();
-        } catch (...) {
-            // Fallback: return format string on any error
+    // Keep const char* as-is
+    static const char* ConvertForFormat(const char* arg) {
+        return arg;
+    }
+
+    // Keep std::string as-is
+    static std::string ConvertForFormat(const std::string& arg) {
+        return arg;
+    }
+
+    // Keep numeric types as-is
+    template<typename T>
+    static T ConvertForFormat(T arg) {
+        return arg;
+    }
+
+    // Extract c_str() from std::string in tuple, pass others as-is
+    template<typename T>
+    static auto ExtractArg(const T& arg) -> decltype(auto) {
+        if constexpr (std::is_same_v<T, std::string>) {
+            return arg.c_str();
+        } else {
+            return arg;
+        }
+    }
+
+    // Format with tuple of converted arguments
+    template<typename Tuple, std::size_t... Is>
+    static std::string FormatWithTuple(const char* fmt, Tuple& tuple, std::index_sequence<Is...>) {
+        // Determine buffer size
+        int size = std::snprintf(nullptr, 0, fmt, ExtractArg(std::get<Is>(tuple))...);
+        if (size <= 0) {
             return std::string(fmt);
         }
+
+        // Format into buffer
+        std::vector<char> buffer(size + 1);
+        std::snprintf(buffer.data(), buffer.size(), fmt, ExtractArg(std::get<Is>(tuple))...);
+        return std::string(buffer.data(), size);
     }
 
 private:

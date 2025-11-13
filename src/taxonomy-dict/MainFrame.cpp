@@ -15,9 +15,9 @@
 #include <algorithm>
 
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
-    EVT_MENU(wxID_EXIT, MainFrame::OnExit)
-    EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
-    EVT_MENU(wxID_PREFERENCES, MainFrame::OnSettings)
+    EVT_MENU(ID_Exit, MainFrame::OnExit)
+    EVT_MENU(ID_About, MainFrame::OnAbout)
+    EVT_MENU(ID_Settings, MainFrame::OnSettings)
     EVT_BUTTON(ID_Download, MainFrame::OnDownload)
     EVT_BUTTON(ID_LoadZip, MainFrame::OnLoadZip)
     EVT_LISTBOX(ID_SelectLanguage, MainFrame::OnLanguageSelect)
@@ -115,12 +115,12 @@ void MainFrame::CreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
 
     wxMenu* fileMenu = new wxMenu();
-    fileMenu->Append(wxID_PREFERENCES, "Settings", "Open settings dialog");
+    fileMenu->Append(ID_Settings, TR_DICT(DictStringId::MenuFileSettings), TR_DICT(DictStringId::MenuFileSettingsHelp));
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_EXIT, TR_DICT(DictStringId::MenuFileExit), TR_DICT(DictStringId::MenuFileExitHelp));
+    fileMenu->Append(ID_Exit, TR_DICT(DictStringId::MenuFileExit), TR_DICT(DictStringId::MenuFileExitHelp));
 
     wxMenu* helpMenu = new wxMenu();
-    helpMenu->Append(wxID_ABOUT, TR_DICT(DictStringId::MenuHelpAbout), TR_DICT(DictStringId::MenuHelpAboutHelp));
+    helpMenu->Append(ID_About, TR_DICT(DictStringId::MenuHelpAbout), TR_DICT(DictStringId::MenuHelpAboutHelp));
 
     menuBar->Append(fileMenu, TR_DICT(DictStringId::MenuFile));
     menuBar->Append(helpMenu, TR_DICT(DictStringId::MenuHelp));

@@ -7,6 +7,8 @@ const char* const DICT_STRINGS_ES[] = {
 
     // Menu items
     "&Archivo",
+    "&Configuración",
+    "Abrir diálogo de configuración",
     "&Salir\tCtrl+Q",
     "Salir de la aplicación",
     "A&yuda",

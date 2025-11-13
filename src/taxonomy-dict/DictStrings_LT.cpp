@@ -7,7 +7,9 @@ const char* const DICT_STRINGS_LT[] = {
 
     // Menu items
     "&Failas",
-    "&Išeiti\tCtrl+Q",
+    "&Nustatymai",
+    "Atidaryti nustatymų dialogą",
+    "Iš&eiti\tCtrl+Q",
     "Uždaryti programą",
     "&Pagalba",
     "&Apie\tF1",

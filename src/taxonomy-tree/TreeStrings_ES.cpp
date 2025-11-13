@@ -138,7 +138,7 @@ const char* const TREE_STRINGS_ES[] = {
     // Settins dialog
     "Idioma",
     "Usar configuración de idioma del sistema",
-    "Idioma Detectado:",
+    "Idioma Detectado: %s",
     "Idioma de la Aplicación:",
 
     // Progress messages for archive loading

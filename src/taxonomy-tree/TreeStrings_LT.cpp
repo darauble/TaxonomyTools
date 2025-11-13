@@ -141,7 +141,7 @@ const char* const TREE_STRINGS_LT[] = {
     // Settins dialog
     "Kalba",
     "Naudoti sistemos kalbos nustatymus",
-    "Aptikta kalba:",
+    "Aptikta kalba: %s",
     "Programos kalba:",
 
     // Progress messages for archive loading

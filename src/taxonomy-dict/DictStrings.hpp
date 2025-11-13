@@ -11,6 +11,8 @@ enum class DictStringId {
 
     // Menu items
     MenuFile,
+    MenuFileSettings,
+    MenuFileSettingsHelp,
     MenuFileExit,
     MenuFileExitHelp,
     MenuHelp,

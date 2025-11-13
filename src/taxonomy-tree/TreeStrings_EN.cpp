@@ -138,7 +138,7 @@ const char* const TREE_STRINGS_EN[] = {
     // Settins dialog
     "Language",
     "Use system language settings",
-    "Detected Language:",
+    "Detected Language: %s",
     "Application Language:",
 
     // Progress messages for archive loading
