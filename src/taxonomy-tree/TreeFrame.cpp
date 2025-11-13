@@ -8,6 +8,7 @@
 #include <wx/msgdlg.h>
 #include <wx/progdlg.h>
 #include <wx/dcbuffer.h>
+#include <wx/dcgraph.h>
 #include <wx/config.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
@@ -974,7 +975,8 @@ void TreeCanvas::UpdateView()
 
 void TreeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxBufferedPaintDC dc(this);
+    wxBufferedPaintDC baseDC(this);
+    wxGCDC dc(baseDC);  // Wrap with wxGCDC to ensure graphics context on all platforms
     DoPrepareDC(dc);
 
     dc.SetBackground(*wxWHITE_BRUSH);
