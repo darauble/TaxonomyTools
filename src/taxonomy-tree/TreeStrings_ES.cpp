@@ -93,8 +93,8 @@ const char* const TREE_STRINGS_ES[] = {
 
     // Status messages
     "Listo",
-    "Cargados %1$zu taxones",
-    "Encontrados %1$zu resultados",
+    "Cargados %llu taxones",
+    "Encontrados %llu resultados",
 
     // Special values
     "(Ninguno)",
@@ -104,22 +104,22 @@ const char* const TREE_STRINGS_ES[] = {
     "Error al iniciar descarga",
     "Descarga cancelada",
     "¡Descarga completada exitosamente!\n\nAhora puede cargar el archivo usando Archivo -> Cargar Archivo.",
-    "Descarga fallida: %1$s",
+    "Descarga fallida: %s",
 
     // Loading messages
     "Cargando datos taxonómicos...",
-    "El archivo no existe:\n%1$s",
+    "El archivo no existe:\n%s",
     "Error al cargar datos taxonómicos",
 
     // Indexing messages
-    "Construyendo índice de búsqueda para %1$s...",
-    " y %1$s",
+    "Construyendo índice de búsqueda para %s...",
+    " y %s",
 
     // Export messages
     "No hay taxones seleccionados para comparación",
     "¡Árbol exportado a SVG exitosamente!",
     "Error al exportar árbol a SVG",
-    "¡Árbol exportado a PNG con %1$ld DPI exitosamente!",
+    "¡Árbol exportado a PNG con %ld DPI exitosamente!",
     "Error al exportar árbol a PNG",
     "Valor DPI inválido. Por favor ingrese un número entre 70 y 600.",
 
@@ -142,20 +142,20 @@ const char* const TREE_STRINGS_ES[] = {
     "Idioma de la Aplicación:",
 
     // Progress messages for archive loading
-    "Abriendo archivo: %1$s",
+    "Abriendo archivo: %s",
     "Error al abrir archivo",
-    "El archivo contiene %1$zu archivos",
+    "El archivo contiene %llu archivos",
     "Cargando datos taxonómicos...",
     "Error al cargar datos taxonómicos",
     "Construyendo jerarquía taxonómica...",
     "Escaneando archivos de idioma...",
-    "Se encontraron %1$zu archivos de idioma",
-    "Archivo cargado! %1$zu taxones, %2$zu idiomas",
+    "Se encontraron %llu archivos de idioma",
+    "Archivo cargado! %llu taxones, %llu idiomas",
     "Leyendo archivo CSV de taxonomía...",
     "Error al leer archivo de taxonomía",
-    "Archivo leído, tamaño: %1$zu bytes",
+    "Archivo leído, tamaño: %llu bytes",
     "Error al analizar CSV de taxonomía",
-    "Se analizaron %1$zu entradas taxonómicas",
+    "Se analizaron %llu entradas taxonómicas",
 };
 
 // Compile-time validation

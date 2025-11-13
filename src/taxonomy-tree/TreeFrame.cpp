@@ -376,7 +376,7 @@ void TreeFrame::OnDownload(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        wxString errorMsg = TR_TREE_FMT(TreeStringId::MsgDownloadFailed, statusMsg.ToStdString().c_str());
+        wxString errorMsg = TR_TREE_FMT(TreeStringId::MsgDownloadFailed, statusMsg.utf8_str().data());
         wxMessageBox(errorMsg, TR_TREE(TreeStringId::DlgError), wxOK | wxICON_ERROR);
     }
 }
@@ -407,7 +407,7 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
 {
     if (!wxFileExists(filePath))
     {
-        wxString errorMsg = TR_TREE_FMT(TreeStringId::MsgFileNotExist, filePath.ToStdString().c_str());
+        wxString errorMsg = TR_TREE_FMT(TreeStringId::MsgFileNotExist, filePath.utf8_str().data());
         wxMessageBox(errorMsg, TR_TREE(TreeStringId::DlgError), wxOK | wxICON_ERROR);
         return;
     }
@@ -423,7 +423,8 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
     if (success)
     {
         UpdateLanguageChoices();
-        wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusLoadedTaxa, m_taxonomyData->GetAllTaxa().size());
+        wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusLoadedTaxa,
+                                         static_cast<unsigned long long>(m_taxonomyData->GetAllTaxa().size()));
         SetStatusText(statusMsg, 0);
         // No need for success message box - loading progress is already shown
     }
@@ -548,9 +549,9 @@ void TreeFrame::OnPrimaryLanguageChanged(wxCommandEvent& WXUNUSED(event))
     if (!primaryLang.IsEmpty())
     {
         // Show progress dialog for indexing
-        wxString indexMsg = TR_TREE_FMT(TreeStringId::MsgBuildingIndex, primaryLang.ToStdString().c_str());
+        wxString indexMsg = TR_TREE_FMT(TreeStringId::MsgBuildingIndex, primaryLang.c_str());
         if (!secondaryLang.IsEmpty())
-            indexMsg += TR_TREE_FMT(TreeStringId::MsgBuildingIndexAnd, secondaryLang.ToStdString().c_str());
+            indexMsg += TR_TREE_FMT(TreeStringId::MsgBuildingIndexAnd, secondaryLang.c_str());
 
         wxProgressDialog indexDlg(TR_TREE(TreeStringId::DlgIndexing), indexMsg, 100, this,
                                    wxPD_APP_MODAL | wxPD_AUTO_HIDE);
@@ -621,7 +622,7 @@ void TreeFrame::UpdateSearchResults()
         index++;
     }
 
-    wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusFoundResults, results.size());
+    wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusFoundResults, static_cast<unsigned long long>(results.size()));
     SetStatusText(statusMsg, 1);
 }
 

@@ -96,8 +96,8 @@ const char* const TREE_STRINGS_LT[] = {
 
     // Status messages
     "Paruošta",
-    "Įkelta %1$zu taksonų",
-    "Rasta %1$zu rezultatų",
+    "Įkelta %llu taksonų",
+    "Rasta %llu rezultatų",
 
     // Special values
     "(Nėra)",
@@ -107,22 +107,22 @@ const char* const TREE_STRINGS_LT[] = {
     "Nepavyko pradėti atsisiuntimo",
     "Atsisiuntimas atšauktas",
     "Atsisiuntimas sėkmingai baigtas!\n\nDabar galite įkelti archyvą naudodami Failas -> Įkelti archyvą.",
-    "Atsisiuntimas nepavyko: %1$s",
+    "Atsisiuntimas nepavyko: %s",
 
     // Loading messages
     "Įkeliami taksonomijos duomenys...",
-    "Failas neegzistuoja:\n%1$s",
+    "Failas neegzistuoja:\n%s",
     "Nepavyko įkelti taksonomijos duomenų",
 
     // Indexing messages
-    "Kuriamas paieškos indeksas %1$s...",
-    " ir %1$s",
+    "Kuriamas paieškos indeksas %s...",
+    " ir %s",
 
     // Export messages
     "Nepasirinkta taksonų palyginimui",
     "Medis sėkmingai eksportuotas į SVG!",
     "Nepavyko eksportuoti medžio į SVG",
-    "Medis sėkmingai eksportuotas į PNG su %1$ld DPI!",
+    "Medis sėkmingai eksportuotas į PNG su %ld DPI!",
     "Nepavyko eksportuoti medžio į PNG",
     "Neteisinga DPI reikšmė. Įveskite skaičių nuo 70 iki 600.",
 
@@ -145,20 +145,20 @@ const char* const TREE_STRINGS_LT[] = {
     "Programos kalba:",
 
     // Progress messages for archive loading
-    "Atidaromas archyvas: %1$s",
+    "Atidaromas archyvas: %s",
     "Nepavyko atidaryti archyvo",
-    "Archyve yra %1$zu failų",
+    "Archyve yra %llu failų",
     "Įkeliami taksonomijos duomenys...",
     "Nepavyko įkelti taksonomijos duomenų",
     "Kuriama taksonomijos hierarchija...",
     "Ieškoma kalbų failų...",
-    "Rasta %1$zu kalbų failų",
-    "Archyvas įkeltas! %1$zu taksonų, %2$zu kalbos",
+    "Rasta %llu kalbų failų",
+    "Archyvas įkeltas! %llu taksonų, %llu kalbos",
     "Skaitomas taksonomijos CSV failas...",
     "Nepavyko perskaityti taksonomijos failo",
-    "Failas perskaitytas, dydis: %1$zu baitai",
+    "Failas perskaitytas, dydis: %llu baitai",
     "Nepavyko apdoroti taksonomijos CSV",
-    "Apdorota %1$zu taksonomijos įrašų",
+    "Apdorota %llu taksonomijos įrašų",
 };
 
 // Compile-time validation

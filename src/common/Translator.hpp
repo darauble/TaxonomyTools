@@ -74,12 +74,12 @@ public:
         );
     }
 
-    // Helper for formatted strings with positional parameters
+    // Helper for formatted strings
     template<typename... Args>
     static std::string Format(const char* fmt, Args... args) {
         try {
-            // Convert POSIX positional format to simple format
-            wxString wxFmt = ConvertFormatString(fmt);
+            // Convert UTF-8 C-string to wxString
+            wxString wxFmt(fmt, wxConvUTF8);
 
             // Use wxString::Format for cross-platform formatting
             wxString result = wxString::Format(wxFmt, args...);
@@ -93,19 +93,6 @@ public:
     }
 
 private:
-    // Convert POSIX positional format specifiers to simple format
-    static wxString ConvertFormatString(const char* fmt) {
-        wxString result(fmt, wxConvUTF8);
-
-        // Remove positional parameter syntax (n$)
-        // Works because all format strings use sequential parameters
-        result.Replace(wxT("%1$"), wxT("%"));
-        result.Replace(wxT("%2$"), wxT("%"));
-        result.Replace(wxT("%3$"), wxT("%"));
-        result.Replace(wxT("%4$"), wxT("%"));
-
-        return result;
-    }
     Translator() : m_currentLanguage(Language::English) {}
 
     void NotifyListeners() {

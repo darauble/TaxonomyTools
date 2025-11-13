@@ -71,7 +71,7 @@ bool TaxonomyData::LoadArchive(const wxString& archivePath, std::function<void(c
     }
 
     auto fileList = m_zipReader->GetFileList();
-    updateProgress(10, TR_TREE_FMT(TreeStringId::ProgressArchiveContainsFiles, fileList.size()));
+    updateProgress(10, TR_TREE_FMT(TreeStringId::ProgressArchiveContainsFiles, static_cast<unsigned long long>(fileList.size())));
 
     updateProgress(30, TR_TREE(TreeStringId::ProgressLoadingTaxonomyData));
     if (!LoadTaxonomyData(progressCallback))
@@ -85,7 +85,7 @@ bool TaxonomyData::LoadArchive(const wxString& archivePath, std::function<void(c
 
     updateProgress(80, TR_TREE(TreeStringId::ProgressScanningLanguageFiles));
     std::vector<wxString> languageFiles = m_zipReader->GetLanguageFiles();
-    updateProgress(85, TR_TREE_FMT(TreeStringId::ProgressFoundLanguageFiles, languageFiles.size()));
+    updateProgress(85, TR_TREE_FMT(TreeStringId::ProgressFoundLanguageFiles, static_cast<unsigned long long>(languageFiles.size())));
 
     m_availableLanguages.clear();
     for (const auto& file : languageFiles)
@@ -165,7 +165,7 @@ bool TaxonomyData::LoadTaxonomyData(std::function<void(const wxString&, int)> pr
         return false;
     }
 
-    updateProgress(65, TR_TREE_FMT(TreeStringId::ProgressParsedEntries, tempMap.size()));
+    updateProgress(65, TR_TREE_FMT(TreeStringId::ProgressParsedEntries, static_cast<unsigned long long>(tempMap.size())));
 
     // Convert to TaxonNode map
     m_taxonomyMap.clear();

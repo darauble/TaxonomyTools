@@ -93,8 +93,8 @@ const char* const TREE_STRINGS_EN[] = {
 
     // Status messages
     "Ready",
-    "Loaded %1$zu taxa",
-    "Found %1$zu results",
+    "Loaded %llu taxa",
+    "Found %llu results",
 
     // Special values
     "(None)",
@@ -104,22 +104,22 @@ const char* const TREE_STRINGS_EN[] = {
     "Failed to start download",
     "Download cancelled",
     "Download completed successfully!\n\nYou can now load the archive using File -> Load Archive.",
-    "Download failed: %1$s",
+    "Download failed: %s",
 
     // Loading messages
     "Loading taxonomy data...",
-    "File does not exist:\n%1$s",
+    "File does not exist:\n%s",
     "Failed to load taxonomy data",
 
     // Indexing messages
-    "Building search index for %1$s...",
-    " and %1$s",
+    "Building search index for %s...",
+    " and %s",
 
     // Export messages
     "No taxa selected for comparison",
     "Tree exported to SVG successfully!",
     "Failed to export tree to SVG",
-    "Tree exported to PNG at %1$ld DPI successfully!",
+    "Tree exported to PNG at %ld DPI successfully!",
     "Failed to export tree to PNG",
     "Invalid DPI value. Please enter a number between 70 and 600.",
 
@@ -142,20 +142,20 @@ const char* const TREE_STRINGS_EN[] = {
     "Application Language:",
 
     // Progress messages for archive loading
-    "Opening archive: %1$s",
+    "Opening archive: %s",
     "Failed to open archive",
-    "Archive contains %1$zu files",
+    "Archive contains %llu files",
     "Loading taxonomy data...",
     "Failed to load taxonomy data",
     "Building taxonomy hierarchy...",
     "Scanning for language files...",
-    "Found %1$zu language files",
-    "Archive loaded! %1$zu taxa, %2$zu languages",
+    "Found %llu language files",
+    "Archive loaded! %llu taxa, %llu languages",
     "Reading taxonomy CSV file...",
     "Failed to read taxonomy file",
-    "File read, size: %1$zu bytes",
+    "File read, size: %llu bytes",
     "Failed to parse taxonomy CSV",
-    "Parsed %1$zu taxonomy entries",
+    "Parsed %llu taxonomy entries",
 };
 
 // Compile-time validation
