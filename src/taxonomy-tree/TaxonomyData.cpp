@@ -135,9 +135,6 @@ bool TaxonomyData::LoadFromCache(
     // Set available languages from cache (all languages in ZIP file)
     m_availableLanguages = m_cache->GetAvailableLanguages();
 
-    wxLogMessage("Loaded %zu taxa from cache with %zu languages available",
-                 m_taxonomyMap.size(), m_availableLanguages.size());
-
     return true;
 }
 

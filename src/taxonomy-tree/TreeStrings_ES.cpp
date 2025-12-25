@@ -93,7 +93,7 @@ const char* const TREE_STRINGS_ES[] = {
 
     // Status messages
     "Listo",
-    "Cargados %llu taxones",
+    "Cargados %llu taxones, %llu idiomas disponibles",
     "Encontrados %llu resultados",
 
     // Special values
@@ -172,6 +172,10 @@ const char* const TREE_STRINGS_ES[] = {
     "Caché Desactualizada",
     "El archivo taxonómico ha sido actualizado. ¿Reconstruir caché?\n(Esto puede tardar 15-20 segundos)",
     "Archivo taxonómico guardado no encontrado:\n%s\n\nSeleccione un nuevo archivo mediante Archivo > Cargar Archivo.",
+
+    // Language change messages
+    "Idioma cambiado. Por favor reinicie la aplicación para que los cambios surtan efecto.",
+    "Idioma cambiado",
 };
 
 // Compile-time validation

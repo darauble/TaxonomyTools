@@ -33,7 +33,7 @@ bool TaxonomyCache::OpenDatabase(const wxString& path)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to open cache database: %s", e.what());
+        printf("Failed to open cache database: %s\n", e.what());
         return false;
     }
 }
@@ -83,7 +83,7 @@ wxString TaxonomyCache::GetMetadata(const wxString& key)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to get metadata: %s", e.what());
+        printf("Failed to get metadata: %s\n", e.what());
         return wxEmptyString;
     }
 }
@@ -107,7 +107,7 @@ bool TaxonomyCache::UpdateMetadata(const wxString& key, const wxString& value)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to update metadata: %s", e.what());
+        printf("Failed to update metadata: %s\n", e.what());
         return false;
     }
 }
@@ -149,7 +149,7 @@ bool TaxonomyCache::LoadOrBuild(
         CacheBuilder builder;
         if (!builder.BuildCache(zipPath, cachePath, requiredLanguages, progressCallback))
         {
-            wxLogError("Failed to build cache");
+            printf("Failed to build cache\n");
             return false;
         }
     }
@@ -179,7 +179,7 @@ bool TaxonomyCache::LoadOrBuild(
             // Add missing language
             if (!AddLanguage(zipPath, lang, progressCallback))
             {
-                wxLogWarning("Failed to add language: %s", lang);
+                printf("Failed to add language: %s\n", lang.utf8_str().data());
             }
         }
     }
@@ -224,7 +224,7 @@ bool TaxonomyCache::LoadTaxonomyMap(std::map<long, TaxonNode>& taxonomyMap)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to load taxonomy map: %s", e.what());
+        printf("Failed to load taxonomy map: %s\n", e.what());
         return false;
     }
 }
@@ -258,7 +258,7 @@ bool TaxonomyCache::LoadVernacularData(const wxString& language, std::vector<Ver
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to load vernacular data: %s", e.what());
+        printf("Failed to load vernacular data: %s\n", e.what());
         return false;
     }
 }
@@ -301,7 +301,7 @@ bool TaxonomyCache::GetTaxonNode(long taxonId, TaxonNode& node)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to get taxon node: %s", e.what());
+        printf("Failed to get taxon node: %s\n", e.what());
         return false;
     }
 }
@@ -398,7 +398,7 @@ std::vector<SearchResult> TaxonomyCache::Search(
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to search: %s", e.what());
+        printf("Failed to search: %s\n", e.what());
         return results;
     }
 }

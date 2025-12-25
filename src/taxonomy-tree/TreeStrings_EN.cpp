@@ -93,7 +93,7 @@ const char* const TREE_STRINGS_EN[] = {
 
     // Status messages
     "Ready",
-    "Loaded %llu taxa",
+    "Loaded %llu taxa, %llu languages available",
     "Found %llu results",
 
     // Special values
@@ -172,6 +172,10 @@ const char* const TREE_STRINGS_EN[] = {
     "Cache Out of Date",
     "Taxonomy file has been updated. Rebuild cache?\n(This may take 15-20 seconds)",
     "Saved taxonomy file not found:\n%s\n\nPlease select a new file via File > Load Archive.",
+
+    // Language change messages
+    "Language changed. Please restart the application for changes to take effect.",
+    "Language Changed",
 };
 
 // Compile-time validation

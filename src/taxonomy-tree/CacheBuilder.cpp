@@ -26,7 +26,7 @@ bool CacheBuilder::OpenDatabase(const wxString& path)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to open database: %s", e.what());
+        printf("Failed to open database: %s\n", e.what());
         return false;
     }
 }
@@ -113,7 +113,7 @@ bool CacheBuilder::CreateSchema()
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to create schema: %s", e.what());
+        printf("Failed to create schema: %s\n", e.what());
         return false;
     }
 }
@@ -167,7 +167,7 @@ bool CacheBuilder::InsertTaxonomyData(const std::map<long, TaxonomyEntry>& data,
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to insert taxonomy data: %s", e.what());
+        printf("Failed to insert taxonomy data: %s\n", e.what());
         return false;
     }
 }
@@ -215,7 +215,7 @@ bool CacheBuilder::InsertVernacularData(const std::vector<VernacularEntry>& data
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to insert vernacular data: %s", e.what());
+        printf("Failed to insert vernacular data: %s\n", e.what());
         return false;
     }
 }
@@ -255,7 +255,7 @@ bool CacheBuilder::BuildSearchIndex(std::function<void(const wxString&, int)> pr
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to build search index: %s", e.what());
+        printf("Failed to build search index: %s\n", e.what());
         return false;
     }
 }
@@ -279,7 +279,7 @@ bool CacheBuilder::UpdateMetadata(const wxString& key, const wxString& value)
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to update metadata: %s", e.what());
+        printf("Failed to update metadata: %s\n", e.what());
         return false;
     }
 }
@@ -337,7 +337,7 @@ bool CacheBuilder::BuildCache(
         auto zipReader = std::make_unique<ZipReader>();
         if (!zipReader->OpenArchive(zipPath))
         {
-            wxLogError("Failed to open ZIP archive: %s", zipPath);
+            printf("Failed to open ZIP archive: %s\n", zipPath.utf8_str().data());
             return false;
         }
 
@@ -364,7 +364,7 @@ bool CacheBuilder::BuildCache(
         wxString taxonomyContent;
         if (!zipReader->ReadFileToString("taxa.csv", taxonomyContent))
         {
-            wxLogError("Failed to read taxa.csv from archive");
+            printf("Failed to read taxa.csv from archive\n");
             return false;
         }
 
@@ -372,7 +372,7 @@ bool CacheBuilder::BuildCache(
         CSVParser parser;
         if (!parser.ParseTaxonomyCSV(taxonomyContent, taxonomyMap))
         {
-            wxLogError("Failed to parse taxonomy CSV");
+            printf("Failed to parse taxonomy CSV\n");
             return false;
         }
 
@@ -453,12 +453,12 @@ bool CacheBuilder::BuildCache(
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to build cache: %s", e.what());
+        printf("Failed to build cache: %s\n", e.what());
         return false;
     }
     catch (const std::exception& e)
     {
-        wxLogError("Failed to build cache: %s", e.what());
+        printf("Failed to build cache: %s\n", e.what());
         return false;
     }
 }
@@ -505,7 +505,7 @@ bool CacheBuilder::AddLanguageToCache(
         wxString content;
         if (!zipReader->ReadFileToString(filename, content))
         {
-            wxLogError("Failed to read %s from archive", filename);
+            printf("Failed to read %s from archive\n", filename.utf8_str().data());
             return false;
         }
 
@@ -513,7 +513,7 @@ bool CacheBuilder::AddLanguageToCache(
         CSVParser parser;
         if (!parser.ParseVernacularCSV(content, entries))
         {
-            wxLogError("Failed to parse vernacular CSV");
+            printf("Failed to parse vernacular CSV\n");
             return false;
         }
 
@@ -563,7 +563,7 @@ bool CacheBuilder::AddLanguageToCache(
     }
     catch (const SqliteException& e)
     {
-        wxLogError("Failed to add language: %s", e.what());
+        printf("Failed to add language: %s\n", e.what());
         return false;
     }
 }

@@ -97,7 +97,7 @@ enum class TreeStringId {
 
     // Status messages
     StatusReady,
-    StatusLoadedTaxa,                // "Loaded %1$zu taxa"
+    StatusLoadedTaxa,                // "Loaded %1$zu taxa, %2$zu languages available"
     StatusFoundResults,              // "Found %1$zu results"
 
     // Special values
@@ -176,6 +176,10 @@ enum class TreeStringId {
     MsgCacheOutOfDate,
     MsgRebuildCache,
     MsgFileNotFoundAtPath,               // "Saved taxonomy file not found:\n%1$s\n\nPlease select a new file via File > Load Archive."
+
+    // Language change messages
+    MsgLanguageChangeRestart,
+    DlgLanguageChanged,
 
     COUNT
 };

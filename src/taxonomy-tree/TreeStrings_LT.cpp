@@ -96,7 +96,7 @@ const char* const TREE_STRINGS_LT[] = {
 
     // Status messages
     "Paruošta",
-    "Įkelta %llu taksonų",
+    "Įkelta %llu taksonų, prieinamos %llu kalbos",
     "Rasta %llu rezultatų",
 
     // Special values
@@ -175,6 +175,10 @@ const char* const TREE_STRINGS_LT[] = {
     "Podėlis Pasenęs",
     "Taksonomijos failas buvo atnaujintas. Perkurti podėlį?\n(Tai gali užtrukti 15-20 sekundžių)",
     "Išsaugotas taksonomijos failas nerastas:\n%s\n\nPasirinkite naują failą per Failas > Įkelti archyvą.",
+
+    // Language change messages
+    "Kalba pakeista. Prašome paleisti programą iš naujo, kad pakeitimai įsigaliotų.",
+    "Kalba pakeista",
 };
 
 // Compile-time validation

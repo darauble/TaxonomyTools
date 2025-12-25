@@ -123,7 +123,22 @@ TreeFrame::TreeFrame(const wxString& title)
     if (!taxonomyFilePath.IsEmpty() && wxFileExists(taxonomyFilePath))
     {
         // Always auto-load if path saved and file exists (cache makes this fast)
-        CallAfter(&TreeFrame::LoadTaxonomyFile, taxonomyFilePath);
+        // Delay loading to ensure window is fully rendered first
+        CallAfter([this, taxonomyFilePath]() {
+            // Ensure window is fully laid out and visible
+            Layout();
+            Refresh();
+            Update();
+
+            // Use timer to delay loading without blocking event loop
+            // This allows the window to fully paint before showing progress dialog
+            wxTimer* loadTimer = new wxTimer();
+            loadTimer->Bind(wxEVT_TIMER, [this, taxonomyFilePath, loadTimer](wxTimerEvent&) {
+                LoadTaxonomyFile(taxonomyFilePath);
+                delete loadTimer;  // Clean up timer after use
+            });
+            loadTimer->StartOnce(200);  // 200ms delay for window to render
+        });
     }
     else if (!taxonomyFilePath.IsEmpty())
     {
@@ -476,6 +491,10 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
     wxProgressDialog progressDlg(TR_TREE(TreeStringId::DlgLoading), TR_TREE(TreeStringId::MsgLoadingData), 100, this,
                                  wxPD_APP_MODAL | wxPD_AUTO_HIDE);
 
+    // Force initial display of dialog message
+    progressDlg.Update(0, TR_TREE(TreeStringId::MsgLoadingData));
+    wxYield();  // Process paint events for dialog
+
     bool success = m_taxonomyData->LoadFromCache(filePath, languages,
         [&](const wxString& message, int progress) {
             progressDlg.Update(progress, message);
@@ -490,6 +509,14 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
             primaryLang,
             secondaryLang
         );
+
+        // Show summary in status bar instead of blocking dialog
+        wxString statusMsg = wxString::Format(
+            TR_TREE(TreeStringId::StatusLoadedTaxa),
+            m_taxonomyData->GetAllTaxa().size(),
+            m_taxonomyData->GetAvailableLanguages().size()
+        );
+        SetStatusText(statusMsg, 0);
 
         // Update language dropdowns
         // Note: Don't call UpdateLanguageChoices() here because it would trigger
@@ -562,10 +589,6 @@ void TreeFrame::LoadTaxonomyFile(const wxString& filePath)
         // Update last indexed languages to prevent re-indexing
         m_lastPrimaryLanguage = primaryLang;
         m_lastSecondaryLanguage = secondaryLang;
-
-        wxString statusMsg = TR_TREE_FMT(TreeStringId::StatusLoadedTaxa,
-                                         m_taxonomyData->GetAllTaxa().size());
-        SetStatusText(statusMsg, 0);
     }
     else
     {
@@ -1046,8 +1069,8 @@ void TreeFrame::OnSettings(wxCommandEvent& WXUNUSED(event))
         // Check if language changed
         if (dlg.LanguageChanged())
         {
-            wxMessageBox("Language changed. Please restart the application for changes to take effect.",
-                        "Language Changed", wxOK | wxICON_INFORMATION);
+            wxMessageBox(TR_TREE(TreeStringId::MsgLanguageChangeRestart),
+                        TR_TREE(TreeStringId::DlgLanguageChanged), wxOK | wxICON_INFORMATION);
         }
     }
 }
