@@ -7,6 +7,8 @@
 #include "CSVParser.hpp"
 #include "TaxonomyData.hpp"
 
+class TaxonomyCache;
+
 // Search result entry
 struct SearchResult
 {
@@ -59,8 +61,22 @@ public:
                    const wxString& primaryLanguage,
                    const wxString& secondaryLanguage);
 
+    // Build from cache instead of loading all data
+    void BuildFromCache(
+        const TaxonomyData& taxonomyData,
+        TaxonomyCache* cache,
+        const wxString& primaryLanguage,
+        const wxString& secondaryLanguage
+    );
+
     // Search for taxa by term (case-insensitive, word-based)
     std::vector<SearchResult> Search(const wxString& query) const;
+
+    // Search using cache (bypasses in-memory linear search)
+    std::vector<SearchResult> SearchWithCache(
+        const wxString& query,
+        TaxonomyCache* cache
+    ) const;
 
     // Get display name for a taxon (with primary/secondary language fallback)
     wxString GetDisplayName(long taxonId, bool includeScientific = true) const;
@@ -86,6 +102,9 @@ private:
 
     wxString m_primaryLanguage;
     wxString m_secondaryLanguage;
+
+    // Cache pointer (non-owning)
+    TaxonomyCache* m_cache;
 
     // Helper: add words from a name to the index
     void IndexWords(const wxString& text, long taxonId);

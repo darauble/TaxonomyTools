@@ -73,6 +73,33 @@ endif()
 
 find_package(CURL REQUIRED)
 
+# Find SQLite3
+find_package(SQLite3 REQUIRED)
+if(NOT SQLite3_FOUND)
+    message(FATAL_ERROR "SQLite3 not found. Please install libsqlite3-dev (Linux) or sqlite3 via vcpkg (Windows)")
+endif()
+
+# Check for FTS5 support (optional but recommended)
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_LIBRARIES SQLite::SQLite3)
+check_cxx_source_compiles("
+    #include <sqlite3.h>
+    int main() {
+        sqlite3* db;
+        sqlite3_open(\":memory:\", &db);
+        const char* sql = \"CREATE VIRTUAL TABLE test USING fts5(content);\";
+        sqlite3_exec(db, sql, 0, 0, 0);
+        sqlite3_close(db);
+        return 0;
+    }
+" HAVE_SQLITE_FTS5)
+
+if(NOT HAVE_SQLITE_FTS5)
+    message(WARNING "SQLite3 FTS5 extension not available. Search performance will be degraded.")
+else()
+    message(STATUS "SQLite3 FTS5 extension is available")
+endif()
+
 # Configure version header from template
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/src/common/Version.hpp.in"
@@ -86,6 +113,7 @@ set(COMMON_SOURCES
     src/common/ZipReader.cpp
     src/common/CSVParser.cpp
     src/common/Translator.cpp
+    src/common/SqliteUtils.cpp
 )
 
 set(COMMON_HEADERS
@@ -94,6 +122,7 @@ set(COMMON_HEADERS
     src/common/CSVParser.hpp
     src/common/Translator.hpp
     src/common/TranslatorValidator.hpp
+    src/common/SqliteUtils.hpp
 )
 
 # Create static library for common functionality
@@ -117,6 +146,7 @@ if(UNIX)
         ${wxWidgets_LINK_LIBRARIES}
         ${CURL_LIBRARIES}
         ${LIBZIP_LIBRARIES}
+        SQLite::SQLite3
     )
 else()
     target_include_directories(TaxonomyCommon PUBLIC
@@ -130,6 +160,7 @@ else()
         ${wxWidgets_LIBRARIES}
         CURL::libcurl
         ${LIBZIP_LIBRARIES}
+        SQLite::SQLite3
     )
 endif()
 
@@ -250,6 +281,8 @@ if(BUILD_TAXONOMY_TREE)
         src/taxonomy-tree/SearchIndex.cpp
         src/taxonomy-tree/TreeRenderer.cpp
         src/taxonomy-tree/SettingsDialog.cpp
+        src/taxonomy-tree/TaxonomyCache.cpp
+        src/taxonomy-tree/CacheBuilder.cpp
         src/taxonomy-tree/TreeStrings_EN.cpp
         src/taxonomy-tree/TreeStrings_LT.cpp
         src/taxonomy-tree/TreeStrings_ES.cpp
@@ -262,6 +295,8 @@ if(BUILD_TAXONOMY_TREE)
         src/taxonomy-tree/SearchIndex.hpp
         src/taxonomy-tree/TreeRenderer.hpp
         src/taxonomy-tree/SettingsDialog.hpp
+        src/taxonomy-tree/TaxonomyCache.hpp
+        src/taxonomy-tree/CacheBuilder.hpp
         src/taxonomy-tree/TreeStrings.hpp
         src/taxonomy-tree/icon_data.h
     )
@@ -308,7 +343,7 @@ set(CPACK_PACKAGE_DESCRIPTION "Tools for working with iNaturalist taxonomic data
  TaxonomyTree - Visualize taxonomic family trees and compare species")
 set(CPACK_DEBIAN_PACKAGE_SECTION "science")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxgtk3.2-1, libcurl4, libzip4")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libwxgtk3.2-1, libcurl4, libzip4, libsqlite3-0")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/darauble/TaxonomyTools")
 set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-amd64")

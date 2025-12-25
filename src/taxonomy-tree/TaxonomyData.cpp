@@ -1,4 +1,5 @@
 #include "TaxonomyData.hpp"
+#include "TaxonomyCache.hpp"
 #include "ZipReader.hpp"
 #include "TreeStrings.hpp"
 #include <algorithm>
@@ -104,6 +105,40 @@ bool TaxonomyData::LoadArchive(const wxString& archivePath, std::function<void(c
 std::vector<wxString> TaxonomyData::GetAvailableLanguages() const
 {
     return m_availableLanguages;
+}
+
+bool TaxonomyData::LoadFromCache(
+    const wxString& archivePath,
+    const std::vector<wxString>& languages,
+    std::function<void(const wxString&, int)> progressCallback)
+{
+    // Create cache instance
+    m_cache = std::make_unique<TaxonomyCache>();
+
+    // LoadOrBuild will validate cache and rebuild if needed
+    if (!m_cache->LoadOrBuild(archivePath, languages, progressCallback))
+    {
+        wxLogError("Failed to load or build cache");
+        return false;
+    }
+
+    // Load taxonomy map into memory (needed for tree rendering)
+    if (!m_cache->LoadTaxonomyMap(m_taxonomyMap))
+    {
+        wxLogError("Failed to load taxonomy map from cache");
+        return false;
+    }
+
+    // Build hierarchy relationships
+    BuildHierarchy();
+
+    // Set available languages from cache (all languages in ZIP file)
+    m_availableLanguages = m_cache->GetAvailableLanguages();
+
+    wxLogMessage("Loaded %zu taxa from cache with %zu languages available",
+                 m_taxonomyMap.size(), m_availableLanguages.size());
+
+    return true;
 }
 
 bool TaxonomyData::LoadVernacularData(const wxString& language, std::vector<VernacularEntry>& entries)

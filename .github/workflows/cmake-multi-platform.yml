@@ -39,13 +39,14 @@ jobs:
           libwxgtk3.2-dev \
           libcurl4-openssl-dev \
           libzip-dev \
+          libsqlite3-dev \
           pkg-config
 
     - name: Install dependencies (Windows)
       if: runner.os == 'Windows'
       run: |
         # Install vcpkg dependencies
-        vcpkg install wxwidgets:x64-windows curl:x64-windows libzip:x64-windows
+        vcpkg install wxwidgets:x64-windows curl:x64-windows libzip:x64-windows sqlite3:x64-windows
       shell: cmd
 
     - name: Set reusable strings

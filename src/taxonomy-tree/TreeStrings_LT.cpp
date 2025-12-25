@@ -159,6 +159,22 @@ const char* const TREE_STRINGS_LT[] = {
     "Failas perskaitytas, dydis: %llu baitai",
     "Nepavyko apdoroti taksonomijos CSV",
     "Apdorota %llu taksonomijos įrašų",
+
+    // Cache-related progress messages
+    "Kuriama duomenų bazės schema...",
+    "Rasta %llu prieinamų kalbų",
+    "Įterpiama %llu taksonomijos įrašų...",
+    "Įkeliama kalba: %s",
+    "Kuriamas paieškos indeksas iš liaudinių pavadinimų...",
+    "Kuriamas paieškos indeksas iš mokslinių pavadinimų...",
+    "Paieškos indeksas baigtas",
+    "Podėlis sukurtas!",
+    "Atnaujinamas paieškos indeksas...",
+
+    // Cache validation messages
+    "Podėlis Pasenęs",
+    "Taksonomijos failas buvo atnaujintas. Perkurti podėlį?\n(Tai gali užtrukti 15-20 sekundžių)",
+    "Išsaugotas taksonomijos failas nerastas:\n%s\n\nPasirinkite naują failą per Failas > Įkelti archyvą.",
 };
 
 // Compile-time validation

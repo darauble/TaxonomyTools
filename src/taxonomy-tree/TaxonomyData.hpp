@@ -8,6 +8,7 @@
 #include "CSVParser.hpp"
 
 class ZipReader;
+class TaxonomyCache;
 
 // Extended taxonomy entry with hierarchy chain
 struct TaxonNode
@@ -30,6 +31,16 @@ public:
 
     // Load taxonomy data from zip archive
     bool LoadArchive(const wxString& archivePath, std::function<void(const wxString&, int)> progressCallback = nullptr);
+
+    // Load from cache with automatic rebuild if needed
+    bool LoadFromCache(
+        const wxString& archivePath,
+        const std::vector<wxString>& languages,
+        std::function<void(const wxString&, int)> progressCallback = nullptr
+    );
+
+    // Get cache instance
+    TaxonomyCache* GetCache() { return m_cache.get(); }
 
     // Get available languages from the archive
     std::vector<wxString> GetAvailableLanguages() const;
@@ -54,6 +65,7 @@ private:
     void BuildHierarchy();
 
     std::unique_ptr<ZipReader> m_zipReader;
+    std::unique_ptr<TaxonomyCache> m_cache;
     std::map<long, TaxonNode> m_taxonomyMap;
     std::vector<wxString> m_availableLanguages;
 

@@ -161,6 +161,22 @@ enum class TreeStringId {
     ProgressFailedParseCSV,
     ProgressParsedEntries,               // "Parsed %1$zu taxonomy entries"
 
+    // Cache-related progress messages
+    ProgressCreatingSchema,
+    ProgressFoundAvailableLanguages,     // "Found %1$zu available languages"
+    ProgressInsertingTaxonomyEntries,    // "Inserting %1$zu taxonomy entries..."
+    ProgressLoadingLanguage,             // "Loading language: %1$s"
+    ProgressBuildingSearchIndexVernacular,
+    ProgressBuildingSearchIndexScientific,
+    ProgressSearchIndexComplete,
+    ProgressCacheBuildComplete,
+    ProgressUpdatingSearchIndex,
+
+    // Cache validation messages
+    MsgCacheOutOfDate,
+    MsgRebuildCache,
+    MsgFileNotFoundAtPath,               // "Saved taxonomy file not found:\n%1$s\n\nPlease select a new file via File > Load Archive."
+
     COUNT
 };
 

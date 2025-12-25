@@ -156,6 +156,22 @@ const char* const TREE_STRINGS_EN[] = {
     "File read, size: %llu bytes",
     "Failed to parse taxonomy CSV",
     "Parsed %llu taxonomy entries",
+
+    // Cache-related progress messages
+    "Creating database schema...",
+    "Found %llu available languages",
+    "Inserting %llu taxonomy entries...",
+    "Loading language: %s",
+    "Building search index from vernacular names...",
+    "Building search index from scientific names...",
+    "Search index complete",
+    "Cache build complete!",
+    "Updating search index...",
+
+    // Cache validation messages
+    "Cache Out of Date",
+    "Taxonomy file has been updated. Rebuild cache?\n(This may take 15-20 seconds)",
+    "Saved taxonomy file not found:\n%s\n\nPlease select a new file via File > Load Archive.",
 };
 
 // Compile-time validation

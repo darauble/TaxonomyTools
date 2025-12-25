@@ -156,6 +156,22 @@ const char* const TREE_STRINGS_ES[] = {
     "Archivo leído, tamaño: %llu bytes",
     "Error al analizar CSV de taxonomía",
     "Se analizaron %llu entradas taxonómicas",
+
+    // Cache-related progress messages
+    "Creando esquema de base de datos...",
+    "Se encontraron %llu idiomas disponibles",
+    "Insertando %llu entradas taxonómicas...",
+    "Cargando idioma: %s",
+    "Construyendo índice de búsqueda de nombres vernáculos...",
+    "Construyendo índice de búsqueda de nombres científicos...",
+    "Índice de búsqueda completo",
+    "Caché construida completamente!",
+    "Actualizando índice de búsqueda...",
+
+    // Cache validation messages
+    "Caché Desactualizada",
+    "El archivo taxonómico ha sido actualizado. ¿Reconstruir caché?\n(Esto puede tardar 15-20 segundos)",
+    "Archivo taxonómico guardado no encontrado:\n%s\n\nSeleccione un nuevo archivo mediante Archivo > Cargar Archivo.",
 };
 
 // Compile-time validation
