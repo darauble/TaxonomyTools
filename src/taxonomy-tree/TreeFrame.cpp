@@ -702,6 +702,59 @@ void TreeFrame::OnPrimaryLanguageChanged(wxCommandEvent& WXUNUSED(event))
         TaxonomyCache* cache = m_taxonomyData->GetCache();
         if (cache && cache->IsOpen())
         {
+            // Get archive path from config
+            wxConfig config("TaxonomyTree");
+            wxString archivePath = config.Read("/Taxonomy/FilePath", wxString());
+
+            if (!archivePath.IsEmpty())
+            {
+                // Check if languages are already cached
+                std::vector<wxString> cachedLangs = cache->GetCachedLanguages();
+
+                // Add missing languages
+                if (!primaryLang.IsEmpty())
+                {
+                    bool found = false;
+                    for (const auto& cached : cachedLangs)
+                    {
+                        if (cached == primaryLang)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        printf("Adding missing language to cache: '%s'\n", primaryLang.utf8_str().data());
+                        cache->AddLanguage(archivePath, primaryLang,
+                            [&](const wxString& msg, int progress) {
+                                indexDlg.Update(progress, msg);
+                            });
+                    }
+                }
+
+                if (!secondaryLang.IsEmpty())
+                {
+                    bool found = false;
+                    for (const auto& cached : cachedLangs)
+                    {
+                        if (cached == secondaryLang)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        printf("Adding missing language to cache: '%s'\n", secondaryLang.utf8_str().data());
+                        cache->AddLanguage(archivePath, secondaryLang,
+                            [&](const wxString& msg, int progress) {
+                                indexDlg.Update(progress, msg);
+                            });
+                    }
+                }
+            }
+
             m_searchIndex->BuildFromCache(*m_taxonomyData, cache, primaryLang, secondaryLang);
         }
         else

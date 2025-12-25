@@ -281,43 +281,18 @@ void SearchIndex::BuildFromCache(
     if (!cache || !cache->IsOpen())
         return;
 
-    // Convert language names to codes (e.g., "lithuanian" -> "lt")
-    auto getLanguageCode = [&cache](const wxString& languageName) -> wxString {
-        wxString langMapStr = cache->GetMetadata("language_map");
-        if (!langMapStr.IsEmpty())
-        {
-            wxArrayString mappings = wxSplit(langMapStr, ',');
-            for (const auto& mapping : mappings)
-            {
-                wxArrayString parts = wxSplit(mapping, ':');
-                if (parts.size() == 2 && parts[0] == languageName)
-                {
-                    return parts[1];  // Return the code
-                }
-            }
-        }
-        return languageName;  // Fallback: use as-is
-    };
-
-    wxString primaryCode = getLanguageCode(primaryLanguage);
-    wxString secondaryCode = getLanguageCode(secondaryLanguage);
-
-    printf("BuildFromCache: Converting languages: '%s'->'%s', '%s'->'%s'\n",
-           primaryLanguage.utf8_str().data(), primaryCode.utf8_str().data(),
-           secondaryLanguage.utf8_str().data(), secondaryCode.utf8_str().data());
-
     // Load vernacular names into memory (for GetDisplayName, etc.)
     std::vector<VernacularEntry> primaryEntries, secondaryEntries;
-    if (!primaryCode.IsEmpty())
+    if (!primaryLanguage.IsEmpty())
     {
-        cache->LoadVernacularData(primaryCode, primaryEntries);
-        printf("Loaded %zu primary vernacular entries for '%s'\n", primaryEntries.size(), primaryCode.utf8_str().data());
+        cache->LoadVernacularData(primaryLanguage, primaryEntries);
+        printf("Loaded %zu primary vernacular entries for '%s'\n", primaryEntries.size(), primaryLanguage.utf8_str().data());
     }
 
-    if (!secondaryCode.IsEmpty())
+    if (!secondaryLanguage.IsEmpty())
     {
-        cache->LoadVernacularData(secondaryCode, secondaryEntries);
-        printf("Loaded %zu secondary vernacular entries for '%s'\n", secondaryEntries.size(), secondaryCode.utf8_str().data());
+        cache->LoadVernacularData(secondaryLanguage, secondaryEntries);
+        printf("Loaded %zu secondary vernacular entries for '%s'\n", secondaryEntries.size(), secondaryLanguage.utf8_str().data());
     }
 
     // Populate name maps (same as before)

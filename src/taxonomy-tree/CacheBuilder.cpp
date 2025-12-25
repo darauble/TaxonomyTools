@@ -190,7 +190,8 @@ bool CacheBuilder::InsertVernacularData(const std::vector<VernacularEntry>& data
         for (const auto& entry : data)
         {
             stmt.BindInt64(1, entry.taxonId);
-            stmt.BindText(2, entry.language);
+            // Use language from filename, NOT from CSV (CSV might have "und")
+            stmt.BindText(2, language);
             stmt.BindText(3, entry.vernacularName);
 
             if (!entry.countryCode.IsEmpty())
@@ -392,8 +393,6 @@ bool CacheBuilder::BuildCache(
         );
 
         // Load vernacular data for each language
-        // Build language name -> code mapping (e.g., "lithuanian" -> "lt")
-        std::map<wxString, wxString> languageMap;
         int langProgress = 0;
         for (const auto& lang : languages)
         {
@@ -412,12 +411,6 @@ bool CacheBuilder::BuildCache(
                 if (parser.ParseVernacularCSV(content, entries))
                 {
                     InsertVernacularData(entries, lang, progressCallback);
-
-                    // Extract actual language code from CSV data (e.g., "lt" from lithuanian.csv)
-                    if (!entries.empty() && !entries[0].language.IsEmpty())
-                    {
-                        languageMap[lang] = entries[0].language;
-                    }
                 }
             }
             langProgress++;
@@ -446,14 +439,6 @@ bool CacheBuilder::BuildCache(
         for (const auto& lang : languages)
             cachedLangArray.Add(lang);
         UpdateMetadata("cached_languages", wxJoin(cachedLangArray, ','));
-
-        // Store language name -> code mapping (e.g., "lithuanian:lt,english:en")
-        wxArrayString langMapArray;
-        for (const auto& pair : languageMap)
-        {
-            langMapArray.Add(pair.first + ":" + pair.second);
-        }
-        UpdateMetadata("language_map", wxJoin(langMapArray, ','));
 
         UpdateMetadata("created_at", wxDateTime::Now().FormatISOCombined());
 
@@ -542,25 +527,15 @@ bool CacheBuilder::AddLanguageToCache(
         if (progressCallback)
             progressCallback(TR_TREE(TreeStringId::ProgressUpdatingSearchIndex), 70);
 
-        // Extract actual language code from CSV data
-        wxString languageCode;
-        if (!entries.empty() && !entries[0].language.IsEmpty())
-        {
-            languageCode = entries[0].language;
-        }
-
-        // Update FTS5 index (using actual language code from CSV)
-        if (!languageCode.IsEmpty())
-        {
-            m_db->Execute(wxString::Format(
-                "INSERT INTO search_index (taxon_id, name_type, language, name, taxon_rank) "
-                "SELECT v.taxon_id, 'vernacular', v.language, v.vernacular_name, t.taxon_rank "
-                "FROM vernacular_names v "
-                "JOIN taxonomy t ON v.taxon_id = t.id "
-                "WHERE v.language = '%s'",
-                languageCode
-            ));
-        }
+        // Update FTS5 index with the filename-based language (same as stored in vernacular_names)
+        m_db->Execute(wxString::Format(
+            "INSERT INTO search_index (taxon_id, name_type, language, name, taxon_rank) "
+            "SELECT v.taxon_id, 'vernacular', v.language, v.vernacular_name, t.taxon_rank "
+            "FROM vernacular_names v "
+            "JOIN taxonomy t ON v.taxon_id = t.id "
+            "WHERE v.language = '%s'",
+            language
+        ));
 
         // Update cached_languages metadata
         SqliteStatement metaStmt(m_db->Get(),
@@ -578,26 +553,6 @@ bool CacheBuilder::AddLanguageToCache(
         cachedLangs += language;
 
         UpdateMetadata("cached_languages", cachedLangs);
-
-        // Update language_map metadata
-        if (!languageCode.IsEmpty())
-        {
-            SqliteStatement mapStmt(m_db->Get(),
-                "SELECT value FROM cache_metadata WHERE key = 'language_map'"
-            );
-
-            wxString langMap;
-            if (mapStmt.Step())
-            {
-                langMap = mapStmt.GetColumnText(0);
-            }
-
-            if (!langMap.IsEmpty())
-                langMap += ",";
-            langMap += language + ":" + languageCode;
-
-            UpdateMetadata("language_map", langMap);
-        }
 
         transaction.Commit();
 

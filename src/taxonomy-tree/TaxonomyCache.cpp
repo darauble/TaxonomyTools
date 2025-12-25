@@ -324,46 +324,14 @@ std::vector<SearchResult> TaxonomyCache::Search(
         // Build FTS5 prefix query
         wxString ftsQuery = query + "*";
 
-        // Load language name -> code mapping from metadata
-        std::map<wxString, wxString> languageMap;
-        wxString langMapStr = GetMetadata("language_map");
-        if (!langMapStr.IsEmpty())
-        {
-            wxArrayString mappings = wxSplit(langMapStr, ',');
-            for (const auto& mapping : mappings)
-            {
-                wxArrayString parts = wxSplit(mapping, ':');
-                if (parts.size() == 2)
-                {
-                    languageMap[parts[0]] = parts[1];
-                }
-            }
-        }
-
-        // Convert language names to codes (e.g., "lithuanian" -> "lt")
-        std::vector<wxString> languageCodes;
-        for (const auto& lang : languages)
-        {
-            auto it = languageMap.find(lang);
-            if (it != languageMap.end())
-            {
-                languageCodes.push_back(it->second);
-            }
-            else
-            {
-                // Fallback: use the name as-is (might already be a code)
-                languageCodes.push_back(lang);
-            }
-        }
-
-        // Build language filter using language codes
+        // Build language filter using filename-based language names
         wxString langFilter;
-        if (!languageCodes.empty())
+        if (!languages.empty())
         {
             wxArrayString quotedLangs;
-            for (const auto& code : languageCodes)
+            for (const auto& lang : languages)
             {
-                quotedLangs.Add("'" + code + "'");
+                quotedLangs.Add("'" + lang + "'");
             }
             langFilter = wxString::Format(
                 " AND (s.language IN (%s) OR s.name_type = 'scientific')",
@@ -384,11 +352,6 @@ std::vector<SearchResult> TaxonomyCache::Search(
             langFilter
         );
 
-        // Log language mapping
-        wxArrayString langNames, langCodesArray;
-        for (const auto& lang : languages) langNames.Add(lang);
-        for (const auto& code : languageCodes) langCodesArray.Add(code);
-        
         SqliteStatement stmt(m_db->Get(), sql);
         stmt.BindText(1, ftsQuery);
         stmt.BindInt64(2, maxResults);
